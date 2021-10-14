@@ -16,10 +16,10 @@ all: game.out
 
 
 # Compile: create object files from C source files.
-game.o: game.c ../../drivers/avr/system.h ../../drivers/display.h ../../utils/font.h ../../utils/pacer.h ../../utils/tinygl.h movement.h
+game.o: game.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../drivers/display.h ../../drivers/navswitch.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h movement.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-movement.o: movement.c ../../drivers/avr/system.h ../../drivers/navswitch.h
+movement.o: movement.c ../../drivers/avr/system.h ../../drivers/display.h ../../drivers/navswitch.h ../../utils/font.h ../../utils/pacer.h ../../utils/tinygl.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 pio.o: ../../drivers/avr/pio.c ../../drivers/avr/pio.h ../../drivers/avr/system.h
@@ -46,6 +46,9 @@ font.o: ../../utils/font.c ../../drivers/avr/system.h ../../utils/font.h
 pacer.o: ../../utils/pacer.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../utils/pacer.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
+task.o: ../../utils/task.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../utils/task.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
 tinygl.o: ../../utils/tinygl.c ../../drivers/avr/system.h ../../drivers/display.h ../../utils/font.h ../../utils/tinygl.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
@@ -53,7 +56,7 @@ tinygl.o: ../../utils/tinygl.c ../../drivers/avr/system.h ../../drivers/display.
 
 
 # Link: create output file (executable) from object files.
-game.out: game.o movement.o pio.o system.o timer.o display.o ledmat.o navswitch.o font.o pacer.o tinygl.o
+game.out: game.o movement.o pio.o system.o timer.o display.o ledmat.o navswitch.o font.o pacer.o task.o tinygl.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 

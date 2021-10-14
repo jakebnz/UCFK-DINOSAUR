@@ -6,10 +6,6 @@ system_init@system.c: system_clock_init system_watchdog_timer_init
 
 navswitch_init@navswitch.c: 
 
-timer_init@timer.c: 
-
-pacer_init@pacer.c: timer_init
-
 pio_config_set@pio.c: 
 
 ledmat_init@ledmat.c: pio_config_set pio_config_set
@@ -32,6 +28,14 @@ tinygl_draw_point@tinygl.c: display_pixel_set
 
 tinygl_draw_line@tinygl.c: tinygl_draw_point tinygl_draw_point tinygl_draw_point
 
+timer_init@timer.c: 
+
+timer_get@timer.c: 
+
+timer_wait_until@timer.c: timer_get
+
+task_schedule@task.c: timer_init timer_get timer_wait_until timer_get
+
 pio_config_get@pio.c: 
 
 _delay_loop_1@navswitch.c: 
@@ -40,15 +44,9 @@ pio_input_get@pio.c:
 
 navswitch_update@navswitch.c: pio_config_get pio_config_set pio_config_set _delay_loop_1 pio_input_get pio_config_set
 
-navswitch_push_event_p@navswitch.c: 
+navswitch_down_p@navswitch.c: 
 
-update_movement@movement.c: navswitch_update navswitch_push_event_p navswitch_push_event_p
-
-timer_get@timer.c: 
-
-timer_wait_until@timer.c: timer_get
-
-pacer_wait@pacer.c: timer_wait_until
+update_movement@movement.c: navswitch_update navswitch_down_p navswitch_down_p
 
 font_pixel_get@font.c: 
 
@@ -70,5 +68,9 @@ display_update@display.c: ledmat_display_column
 
 tinygl_update@tinygl.c: tinygl_text_advance display_update
 
-main@game.c: system_init navswitch_init pacer_init tinygl_init tinygl_point tinygl_point tinygl_draw_line tinygl_point tinygl_draw_point update_movement pacer_wait tinygl_point tinygl_draw_point tinygl_update
+draw_player@movement.c: tinygl_point tinygl_draw_point tinygl_point tinygl_draw_point tinygl_update
+
+task_update_player@game.c: update_movement draw_player
+
+main@game.c: system_init navswitch_init tinygl_init tinygl_point tinygl_point tinygl_draw_line tinygl_point tinygl_draw_point task_schedule @task_update_player
 

@@ -8,13 +8,15 @@ font:
 
 tinygl: display font
 
+navswitch: pio
+
 timer: 
 
 pacer: timer
 
-navswitch: pio
+movement: navswitch pacer tinygl
 
-movement: navswitch
+task: timer
 
-game: tinygl pacer movement
+game: tinygl movement task navswitch
 

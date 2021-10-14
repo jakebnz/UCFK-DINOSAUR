@@ -14,19 +14,23 @@
 
 ../../drivers/navswitch.h: 
 
-movement.c: ../../drivers/navswitch.h
-
-movement.o: movement.c
+../../utils/pacer.h: 
 
 ../../drivers/display.h: 
 
 ../../utils/tinygl.h: ../../drivers/display.h ../../utils/font.h
 
-../../utils/pacer.h: 
+movement.c: ../../drivers/navswitch.h ../../utils/pacer.h ../../utils/tinygl.h
+
+movement.o: movement.c
 
 movement.h: 
 
-game.c: ../../utils/tinygl.h ../../utils/pacer.h movement.h
+../../drivers/avr/timer.h: 
+
+../../utils/task.h: ../../drivers/avr/timer.h
+
+game.c: ../../utils/tinygl.h movement.h ../../utils/task.h ../../drivers/navswitch.h
 
 game.o: game.c
 
@@ -34,11 +38,9 @@ game.o: game.c
 
 ../../utils/tinygl.o: ../../utils/tinygl.c
 
-../../drivers/avr/system.c: 
+../../utils/task.c: ../../utils/task.h ../../drivers/avr/timer.h
 
-../../drivers/avr/system.o: ../../drivers/avr/system.c
-
-../../drivers/avr/timer.h: 
+../../utils/task.o: ../../utils/task.c
 
 ../../drivers/avr/timer.c: ../../drivers/avr/timer.h
 
@@ -52,6 +54,10 @@ game.o: game.c
 
 ../../drivers/avr/pio.o: ../../drivers/avr/pio.c
 
+../../drivers/avr/system.c: 
+
+../../drivers/avr/system.o: ../../drivers/avr/system.c
+
 ../../utils/pacer.c: ../../drivers/avr/timer.h ../../utils/pacer.h
 
 ../../utils/pacer.o: ../../utils/pacer.c
@@ -62,5 +68,5 @@ game.o: game.c
 
 ../../drivers/navswitch.o: ../../drivers/navswitch.c
 
-game.out: ../../drivers/ledmat.o ../../utils/font.o movement.o game.o ../../utils/tinygl.o ../../drivers/avr/system.o ../../drivers/avr/timer.o ../../drivers/display.o ../../drivers/avr/pio.o ../../utils/pacer.o ../../drivers/navswitch.o
+game.out: ../../drivers/ledmat.o ../../utils/font.o movement.o game.o ../../utils/tinygl.o ../../utils/task.o ../../drivers/avr/timer.o ../../drivers/display.o ../../drivers/avr/pio.o ../../drivers/avr/system.o ../../utils/pacer.o ../../drivers/navswitch.o
 
