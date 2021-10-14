@@ -1,10 +1,11 @@
 #include "navswitch.h"
 #include "pacer.h"
 #include "tinygl.h"
+#include "button.h"
 #include <stdbool.h>
 
 
-void update_movement (uint16_t* player_position) {
+void update_movement (uint16_t* player_position, bool *player_jumping, int8_t* jump_array, uint16_t *jump_array_length, uint16_t *jump_array_pos) {
     navswitch_update();
     //if navswitch being pushed right
     if (navswitch_down_p(NAVSWITCH_NORTH)) {
@@ -20,7 +21,20 @@ void update_movement (uint16_t* player_position) {
         }
     }
 
-    
+    button_update();
+    if (!(*player_jumping)) {
+        if (button_push_event_p(0)) {
+            *player_jumping = true;
+        }
+    }
+    if (*player_jumping) {
+        player_position[0] = player_position[0] - jump_array[*jump_array_pos];
+        (*jump_array_pos)++;
+        if (*jump_array_pos == *jump_array_length) {
+            *jump_array_pos = 0;
+            *player_jumping = false;
+        }
+    }
 }
 
 

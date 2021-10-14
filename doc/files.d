@@ -20,9 +20,15 @@
 
 ../../utils/tinygl.h: ../../drivers/display.h ../../utils/font.h
 
-movement.c: ../../drivers/navswitch.h ../../utils/pacer.h ../../utils/tinygl.h
+../../drivers/button.h: 
+
+movement.c: ../../drivers/navswitch.h ../../utils/pacer.h ../../utils/tinygl.h ../../drivers/button.h
 
 movement.o: movement.c
+
+../../drivers/button.c: ../../drivers/button.h ../../drivers/avr/pio.h
+
+../../drivers/button.o: ../../drivers/button.c
 
 movement.h: 
 
@@ -30,7 +36,7 @@ movement.h:
 
 ../../utils/task.h: ../../drivers/avr/timer.h
 
-game.c: ../../utils/tinygl.h movement.h ../../utils/task.h ../../drivers/navswitch.h
+game.c: ../../utils/tinygl.h movement.h ../../utils/task.h ../../drivers/navswitch.h ../../drivers/button.h
 
 game.o: game.c
 
@@ -68,5 +74,5 @@ game.o: game.c
 
 ../../drivers/navswitch.o: ../../drivers/navswitch.c
 
-game.out: ../../drivers/ledmat.o ../../utils/font.o movement.o game.o ../../utils/tinygl.o ../../utils/task.o ../../drivers/avr/timer.o ../../drivers/display.o ../../drivers/avr/pio.o ../../drivers/avr/system.o ../../utils/pacer.o ../../drivers/navswitch.o
+game.out: ../../drivers/ledmat.o ../../utils/font.o movement.o ../../drivers/button.o game.o ../../utils/tinygl.o ../../utils/task.o ../../drivers/avr/timer.o ../../drivers/display.o ../../drivers/avr/pio.o ../../drivers/avr/system.o ../../utils/pacer.o ../../drivers/navswitch.o
 

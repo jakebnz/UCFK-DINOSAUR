@@ -46,7 +46,13 @@ navswitch_update@navswitch.c: pio_config_get pio_config_set pio_config_set _dela
 
 navswitch_down_p@navswitch.c: 
 
-update_movement@movement.c: navswitch_update navswitch_down_p navswitch_down_p
+button_push_event_p@button.c: 
+
+update_movement@movement.c: navswitch_update navswitch_down_p navswitch_down_p button_push_event_p
+
+task_update_player@game.c: update_movement
+
+draw_player@movement.c: tinygl_point tinygl_draw_point tinygl_point tinygl_draw_point
 
 font_pixel_get@font.c: 
 
@@ -68,9 +74,7 @@ display_update@display.c: ledmat_display_column
 
 tinygl_update@tinygl.c: tinygl_text_advance display_update
 
-draw_player@movement.c: tinygl_point tinygl_draw_point tinygl_point tinygl_draw_point tinygl_update
+task_draw_screen@game.c: draw_player tinygl_update
 
-task_update_player@game.c: update_movement draw_player
-
-main@game.c: system_init navswitch_init tinygl_init tinygl_point tinygl_point tinygl_draw_line tinygl_point tinygl_draw_point task_schedule @task_update_player
+main@game.c: system_init navswitch_init tinygl_init tinygl_point tinygl_point tinygl_draw_line task_schedule @task_update_player @task_draw_screen
 

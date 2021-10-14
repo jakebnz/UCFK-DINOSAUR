@@ -14,9 +14,11 @@ timer:
 
 pacer: timer
 
-movement: navswitch pacer tinygl
+button: pio
+
+movement: navswitch pacer tinygl button
 
 task: timer
 
-game: tinygl movement task navswitch
+game: tinygl movement task navswitch button
 
