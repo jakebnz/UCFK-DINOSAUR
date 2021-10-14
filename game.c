@@ -18,6 +18,7 @@ int main (void)
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
 
     tinygl_text("DINOSAUR");
+    pacer_init(PACER_RATE);
 
     while (1)
     {
