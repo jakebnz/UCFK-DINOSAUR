@@ -29,6 +29,15 @@ void display_start(void)
     tinygl_update();
 }
 
+void display_score(int score) {
+
+
+    for(int i = 0; i < 7816; i++) {
+      score = i;
+    }
+
+}
+
 
 int main (void)
 {
@@ -45,4 +54,3 @@ int main (void)
 
     }
 }
-
