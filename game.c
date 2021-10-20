@@ -10,7 +10,7 @@ typedef struct  {
     uint16_t player_position[2];
     uint16_t prev_player_position[2];
     bool player_jumping;
-    int8_t jump_array[9];
+    int8_t jump_array[8];
     uint16_t jump_array_length;
     uint16_t jump_array_pos;
 } game_data_t;
@@ -46,9 +46,9 @@ int main (void)
     //Draw line across bottom row of pixels. This is the 'floor'.
     tinygl_draw_line(tinygl_point(4,0), tinygl_point (4, 6), 1);
 
-    //Create the tuple used for the coordinates of the player. Set it to 3,6 by default.
+    //Create game data struct and fill with default values.
     static game_data_t game_data = {
-        .player_position[0] = 3,
+        .player_position[0] = 3, //default player positon is 3,6
         .player_position[1] = 6,
         .player_jumping = false,
         .jump_array = {1, 1, 1, 0,  0, -1, -1, -1},
