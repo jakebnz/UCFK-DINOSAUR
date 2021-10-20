@@ -46,9 +46,11 @@ navswitch_update@navswitch.c: pio_config_get pio_config_set pio_config_set _dela
 
 navswitch_down_p@navswitch.c: 
 
+button_update@button.c: pio_input_get
+
 button_push_event_p@button.c: 
 
-update_movement@movement.c: navswitch_update navswitch_down_p navswitch_down_p button_push_event_p
+update_movement@movement.c: navswitch_update navswitch_down_p navswitch_down_p button_update button_push_event_p
 
 task_update_player@game.c: update_movement
 

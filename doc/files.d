@@ -1,22 +1,16 @@
-../../drivers/avr/pio.h: 
-
 ../../drivers/ledmat.h: 
 
-../../drivers/ledmat.c: ../../drivers/avr/pio.h ../../drivers/ledmat.h
+../../drivers/display.h: 
 
-../../drivers/ledmat.o: ../../drivers/ledmat.c
+../../drivers/display.c: ../../drivers/ledmat.h ../../drivers/display.h
 
-../../utils/font.h: 
-
-../../utils/font.c: ../../utils/font.h
-
-../../utils/font.o: ../../utils/font.c
+../../drivers/display.o: ../../drivers/display.c
 
 ../../drivers/navswitch.h: 
 
 ../../utils/pacer.h: 
 
-../../drivers/display.h: 
+../../utils/font.h: 
 
 ../../utils/tinygl.h: ../../drivers/display.h ../../utils/font.h
 
@@ -26,23 +20,9 @@ movement.c: ../../drivers/navswitch.h ../../utils/pacer.h ../../utils/tinygl.h .
 
 movement.o: movement.c
 
-../../drivers/button.c: ../../drivers/button.h ../../drivers/avr/pio.h
-
-../../drivers/button.o: ../../drivers/button.c
-
-movement.h: 
-
 ../../drivers/avr/timer.h: 
 
 ../../utils/task.h: ../../drivers/avr/timer.h
-
-game.c: ../../utils/tinygl.h movement.h ../../utils/task.h ../../drivers/navswitch.h ../../drivers/button.h
-
-game.o: game.c
-
-../../utils/tinygl.c: ../../utils/tinygl.h ../../drivers/display.h ../../utils/font.h
-
-../../utils/tinygl.o: ../../utils/tinygl.c
 
 ../../utils/task.c: ../../utils/task.h ../../drivers/avr/timer.h
 
@@ -52,27 +32,53 @@ game.o: game.c
 
 ../../drivers/avr/timer.o: ../../drivers/avr/timer.c
 
-../../drivers/display.c: ../../drivers/ledmat.h ../../drivers/display.h
+movement.h: 
 
-../../drivers/display.o: ../../drivers/display.c
+obstacle.h: 
 
-../../drivers/avr/pio.c: ../../drivers/avr/pio.h
+game.c: ../../utils/tinygl.h movement.h ../../utils/task.h ../../drivers/navswitch.h ../../drivers/button.h obstacle.h
 
-../../drivers/avr/pio.o: ../../drivers/avr/pio.c
+game.o: game.c
 
-../../drivers/avr/system.c: 
+../../utils/font.c: ../../utils/font.h
 
-../../drivers/avr/system.o: ../../drivers/avr/system.c
+../../utils/font.o: ../../utils/font.c
 
-../../utils/pacer.c: ../../drivers/avr/timer.h ../../utils/pacer.h
+obstacle.c: obstacle.h
 
-../../utils/pacer.o: ../../utils/pacer.c
+obstacle.o: obstacle.c
 
 ../../drivers/avr/delay.h: 
+
+../../drivers/avr/pio.h: 
 
 ../../drivers/navswitch.c: ../../drivers/navswitch.h ../../drivers/avr/delay.h ../../drivers/avr/pio.h
 
 ../../drivers/navswitch.o: ../../drivers/navswitch.c
 
-game.out: ../../drivers/ledmat.o ../../utils/font.o movement.o ../../drivers/button.o game.o ../../utils/tinygl.o ../../utils/task.o ../../drivers/avr/timer.o ../../drivers/display.o ../../drivers/avr/pio.o ../../drivers/avr/system.o ../../utils/pacer.o ../../drivers/navswitch.o
+../../drivers/ledmat.c: ../../drivers/avr/pio.h ../../drivers/ledmat.h
+
+../../drivers/ledmat.o: ../../drivers/ledmat.c
+
+../../drivers/avr/system.c: 
+
+../../drivers/avr/system.o: ../../drivers/avr/system.c
+
+../../drivers/avr/pio.c: ../../drivers/avr/pio.h
+
+../../drivers/avr/pio.o: ../../drivers/avr/pio.c
+
+../../drivers/button.c: ../../drivers/button.h ../../drivers/avr/pio.h
+
+../../drivers/button.o: ../../drivers/button.c
+
+../../utils/tinygl.c: ../../utils/tinygl.h ../../drivers/display.h ../../utils/font.h
+
+../../utils/tinygl.o: ../../utils/tinygl.c
+
+../../utils/pacer.c: ../../drivers/avr/timer.h ../../utils/pacer.h
+
+../../utils/pacer.o: ../../utils/pacer.c
+
+game.out: ../../drivers/display.o movement.o ../../utils/task.o ../../drivers/avr/timer.o game.o ../../utils/font.o obstacle.o ../../drivers/navswitch.o ../../drivers/ledmat.o ../../drivers/avr/system.o ../../drivers/avr/pio.o ../../drivers/button.o ../../utils/tinygl.o ../../utils/pacer.o
 

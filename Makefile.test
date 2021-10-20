@@ -14,10 +14,16 @@ all: game
 
 
 # Compile: create object files from C source files.
-game-test.o: game.c ../../drivers/display.h ../../drivers/test/system.h ../../utils/font.h ../../utils/pacer.h ../../utils/tinygl.h movement.h
+game-test.o: game.c ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../drivers/test/system.h ../../drivers/test/timer.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h movement.h obstacle.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-movement-test.o: movement.c ../../drivers/navswitch.h ../../drivers/test/system.h
+movement-test.o: movement.c ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../drivers/test/system.h ../../utils/font.h ../../utils/pacer.h ../../utils/tinygl.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+obstacle-test.o: obstacle.c obstacle.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+button-test.o: ../../drivers/button.c ../../drivers/button.h ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 display-test.o: ../../drivers/display.c ../../drivers/display.h ../../drivers/ledmat.h ../../drivers/test/system.h
@@ -47,6 +53,9 @@ font-test.o: ../../utils/font.c ../../drivers/test/system.h ../../utils/font.h
 pacer-test.o: ../../utils/pacer.c ../../drivers/test/system.h ../../drivers/test/timer.h ../../utils/pacer.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
+task-test.o: ../../utils/task.c ../../drivers/test/system.h ../../drivers/test/timer.h ../../utils/task.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
 tinygl-test.o: ../../utils/tinygl.c ../../drivers/display.h ../../drivers/test/system.h ../../utils/font.h ../../utils/tinygl.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
@@ -54,14 +63,14 @@ tinygl-test.o: ../../utils/tinygl.c ../../drivers/display.h ../../drivers/test/s
 
 
 # Link: create executable file from object files.
-game: game-test.o movement-test.o display-test.o ledmat-test.o navswitch-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o font-test.o pacer-test.o tinygl-test.o
+game: game-test.o movement-test.o obstacle-test.o button-test.o display-test.o ledmat-test.o navswitch-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o font-test.o pacer-test.o task-test.o tinygl-test.o
 	$(CC) $(CFLAGS) $^ -o $@ -lrt
 
 
 # Clean: delete derived files.
 .PHONY: clean
 clean: 
-	-$(DEL) game game-test.o movement-test.o display-test.o ledmat-test.o navswitch-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o font-test.o pacer-test.o tinygl-test.o
+	-$(DEL) game game-test.o movement-test.o obstacle-test.o button-test.o display-test.o ledmat-test.o navswitch-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o font-test.o pacer-test.o task-test.o tinygl-test.o
 
 
 

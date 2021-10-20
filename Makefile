@@ -5,7 +5,7 @@
 
 # Definitions.
 CC = avr-gcc
-CFLAGS = -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I../../drivers -I../../drivers/avr -I../../utils
+CFLAGS = -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I../../drivers/avr -I../../drivers -I../../utils
 OBJCOPY = avr-objcopy
 SIZE = avr-size
 DEL = rm
@@ -16,10 +16,13 @@ all: game.out
 
 
 # Compile: create object files from C source files.
-game.o: game.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h movement.h
+game.o: game.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h movement.h obstacle.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 movement.o: movement.c ../../drivers/avr/system.h ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../utils/font.h ../../utils/pacer.h ../../utils/tinygl.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+obstacle.o: obstacle.c obstacle.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 pio.o: ../../drivers/avr/pio.c ../../drivers/avr/pio.h ../../drivers/avr/system.h
@@ -59,7 +62,7 @@ tinygl.o: ../../utils/tinygl.c ../../drivers/avr/system.h ../../drivers/display.
 
 
 # Link: create output file (executable) from object files.
-game.out: game.o movement.o pio.o system.o timer.o button.o display.o ledmat.o navswitch.o font.o pacer.o task.o tinygl.o
+game.out: game.o movement.o obstacle.o pio.o system.o timer.o button.o display.o ledmat.o navswitch.o font.o pacer.o task.o tinygl.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 

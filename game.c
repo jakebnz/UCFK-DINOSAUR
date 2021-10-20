@@ -4,6 +4,7 @@
 #include "task.h"
 #include "navswitch.h"
 #include "button.h"
+#include "obstacle.h"
 #include <stdbool.h>
 
 typedef struct  {
@@ -13,6 +14,7 @@ typedef struct  {
     int8_t jump_array[8];
     uint16_t jump_array_length;
     uint16_t jump_array_pos;
+    obstacle_t obstacle_array[4];
 } game_data_t;
 
 static void task_update_player (void *data) {
