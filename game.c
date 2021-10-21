@@ -28,7 +28,7 @@ static void task_update_player (void *data) {
     
     game_data_t* game_data = data;
 
-    if (game_data->game_over == false) {
+    if (game_data->game_over == false && game_data->game_not_started == false) {
         game_data->prev_player_position[0] = game_data->player_position[0];
         game_data->prev_player_position[1] = game_data->player_position[1];
         update_movement(game_data->player_position, &game_data->player_jumping, game_data->jump_array, &game_data->jump_array_length, &game_data->jump_array_pos);
@@ -40,7 +40,7 @@ static void task_update_obstacles (void *data) {
     
     game_data_t* game_data = data;
 
-    if (game_data->game_over == false) {
+    if (game_data->game_over == false && game_data->game_not_started == false) {
         update_obstacles(game_data->obstacle_array, &game_data->obstacle_amount, &game_data->obstacle_creation_gap);
         check_collision(game_data->obstacle_array, game_data->player_position, &game_data->game_over);
     }
@@ -50,26 +50,34 @@ static void task_draw_screen (void *data) {
 
     game_data_t* game_data = data;
 
-    if (game_data->game_over == false) {
+    if (game_data->game_over == false && game_data->game_not_started == false) {
         tinygl_clear(); //clear screen
         tinygl_draw_line(tinygl_point(4,0), tinygl_point (4, 6), 1); //draw floor
         draw_player(game_data->player_position); //draw player
         draw_obstacles(game_data->obstacle_array);
-        tinygl_update();
     }
+
+    tinygl_update();
 }
 
 static void task_update_game_active(void *data) {
 
     game_data_t* game_data = data;
 
-    if (game_data->game_over == true && game_data->game_over_initialised == false) { //Ran when the game ends.
+    if (game_data->game_not_started == true && game_data->game_not_started_initialised == false) { //if the game hasn't started, and
+        game_data->game_not_started_initialised = true;
+        tinygl_clear();
+        tinygl_text("  DINOSAUR ");
+    } else if (game_data->game_not_started == true && game_data->game_not_started_initialised == true) { //if the game hasn't started, and if game_not_started task has already run.
+        button_update();
+        if (button_push_event_p(0)) { //if button gets pushed start game
+            game_data->game_not_started = false;
+        }
+    } else if (game_data->game_over == true && game_data->game_over_initialised == false) { //Ran when the game ends.
         game_data->game_over_initialised = true;
         tinygl_clear();
         tinygl_text(" GAME OVER  SCORE:10 ");
-    }
-
-    if (game_data->game_over == true && game_data->game_over_initialised == true) { //Ran after the first time the game ends.
+    } else if (game_data->game_over == true && game_data->game_over_initialised == true) { //Ran after the first time the game ends.
         button_update();
         if (button_push_event_p(0)) { //if button gets pushed restart game
             //set everything back to default value
@@ -88,7 +96,7 @@ static void task_update_game_active(void *data) {
         }
     }
 
-    tinygl_update();
+    //tinygl_update();
 
 }
 
@@ -109,10 +117,6 @@ int main (void)
     tinygl_text_mode_set(TINYGL_TEXT_MODE_SCROLL);
     tinygl_text_dir_set(TINYGL_TEXT_DIR_ROTATE);
 
-    
-    //Draw line across bottom row of pixels. This is the 'floor'.
-    tinygl_draw_line(tinygl_point(4,0), tinygl_point (4, 6), 1);
-
     //Create game data struct and fill with default values.
     static game_data_t game_data = {
         .player_position[0] = 3, //default player positon is 3,6
@@ -131,7 +135,7 @@ int main (void)
 
     task_t tasks[] =
     {
-        {.func = task_update_game_active, .period = TASK_RATE / 1000., .data = &game_data},
+        {.func = task_update_game_active, .period = TASK_RATE / 12., .data = &game_data},
         {.func = task_update_player, .period = TASK_RATE / 12., .data = &game_data},
         {.func = task_update_obstacles, .period = TASK_RATE / 8., .data = &game_data},
         {.func = task_draw_screen, .period = TASK_RATE / 1000., .data = &game_data},
