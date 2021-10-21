@@ -6,8 +6,8 @@
 
 obstacle_t obstacle_array[4];
 
-void update_obstacles (obstacle_t* obstacle_array, uint8_t *obstacle_amount, uint8_t *obstacle_creation_gap) {
-    if (*obstacle_creation_gap >= 3) {//if its been more than three passes since last obstacle was created
+void update_obstacles (obstacle_t* obstacle_array, uint8_t *obstacle_amount, int8_t *obstacle_creation_gap) {
+    if (*obstacle_creation_gap >= 4) {//if its been more than three passes since last obstacle was created
         if (*obstacle_amount < 4) { //if there are less than 4 obstacles active add a new one
             obstacle_array[*obstacle_amount].isVertical = rand() % 2; //generate random number either 0 or 1
             obstacle_array[*obstacle_amount].position[1] = -1; //x pos starts as -1, has 1 added to it later
@@ -45,6 +45,23 @@ void draw_obstacles (obstacle_t* obstacle_array) {
                 tinygl_draw_line(tinygl_point(obstacle_to_draw.position[0], obstacle_to_draw.position[1]), tinygl_point(obstacle_to_draw.position[0] + 1, obstacle_to_draw.position[1]), 1);
             } else { //if it's horizontal, the obstacle consists of its position and the dot to the left of it
                 tinygl_draw_line(tinygl_point(obstacle_to_draw.position[0], obstacle_to_draw.position[1]), tinygl_point(obstacle_to_draw.position[0], obstacle_to_draw.position[1] + 1), 1);
+            }
+        }
+    }
+}
+
+void check_collision (obstacle_t* obstacle_array, uint16_t* player_position, bool *game_over) {
+    for (uint8_t i = 0; i < 4; i++) { //iterate through every obstacle
+        obstacle_t obstacle_to_check = obstacle_array[i]; //assigning current obstacle to variable so we dont have to index the array every time
+        if (obstacle_to_check.position[0] == player_position[0] && obstacle_to_check.position[1] == player_position[1]) { //if origin of obstacle is the same as the player position
+            *game_over = true;
+        } else if (obstacle_to_check.isVertical) { //if its vertical we also check the point below it
+            if (obstacle_to_check.position[0] + 1 == player_position[0] && obstacle_to_check.position[1] == player_position[1]) {
+                *game_over = true;
+            }
+        } else { //if its horizontal we check the point to the left of it
+            if (obstacle_to_check.position[0] == player_position[0] && obstacle_to_check.position[1] + 1 == player_position[1]) {
+                *game_over = true;
             }
         }
     }

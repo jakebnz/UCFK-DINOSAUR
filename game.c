@@ -6,6 +6,7 @@
 #include "button.h"
 #include "obstacle.h"
 #include <stdbool.h>
+#include "../fonts/font5x7_1.h"
 
 typedef struct  {
     uint16_t player_position[2];
@@ -16,16 +17,20 @@ typedef struct  {
     uint16_t jump_array_pos;
     obstacle_t obstacle_array[4];
     uint8_t obstacle_amount;
-    uint8_t obstacle_creation_gap;
+    int8_t obstacle_creation_gap;
+    bool game_over;
+    bool game_already_over;
 } game_data_t;
 
 static void task_update_player (void *data) {
     
     game_data_t* game_data = data;
 
-    game_data->prev_player_position[0] = game_data->player_position[0];
-    game_data->prev_player_position[1] = game_data->player_position[1];
-    update_movement(game_data->player_position, &game_data->player_jumping, game_data->jump_array, &game_data->jump_array_length, &game_data->jump_array_pos);
+    if (game_data->game_over == false) {
+        game_data->prev_player_position[0] = game_data->player_position[0];
+        game_data->prev_player_position[1] = game_data->player_position[1];
+        update_movement(game_data->player_position, &game_data->player_jumping, game_data->jump_array, &game_data->jump_array_length, &game_data->jump_array_pos);
+    }
     
 }
 
@@ -33,19 +38,39 @@ static void task_update_obstacles (void *data) {
     
     game_data_t* game_data = data;
 
-    update_obstacles(game_data->obstacle_array, &game_data->obstacle_amount, &game_data->obstacle_creation_gap);
-
+    if (game_data->game_over == false) {
+        update_obstacles(game_data->obstacle_array, &game_data->obstacle_amount, &game_data->obstacle_creation_gap);
+        check_collision(game_data->obstacle_array, game_data->player_position, &game_data->game_over);
+    }
 }
 
 static void task_draw_screen (void *data) {
 
     game_data_t* game_data = data;
-    
-    tinygl_clear(); //clear screen
-    tinygl_draw_line(tinygl_point(4,0), tinygl_point (4, 6), 1); //draw floor
-    draw_player(game_data->player_position); //draw player
-    draw_obstacles(game_data->obstacle_array);
+
+    if (game_data->game_over == false) {
+        tinygl_clear(); //clear screen
+        tinygl_draw_line(tinygl_point(4,0), tinygl_point (4, 6), 1); //draw floor
+        draw_player(game_data->player_position); //draw player
+        draw_obstacles(game_data->obstacle_array);
+        tinygl_update();
+    }
+}
+
+static void task_game_over (void *data) {
+
+    game_data_t* game_data = data;
+
+    if (game_data->game_over == true && game_data->game_already_over == false) {
+        game_data->game_already_over == true;
+        tinygl_font_set (&font5x7_1);
+        tinygl_text_speed_set(10);
+        tinygl_text_mode_set(TINYGL_TEXT_MODE_SCROLL);
+        tinygl_text("GAME OVER");
+    }
+
     tinygl_update();
+
 }
 
 
@@ -58,6 +83,7 @@ int main (void)
 
     //Initiliase tiny gl with a polling rate of 100hz
     tinygl_init(1000);
+
     
     //Draw line across bottom row of pixels. This is the 'floor'.
     tinygl_draw_line(tinygl_point(4,0), tinygl_point (4, 6), 1);
@@ -71,15 +97,19 @@ int main (void)
         .jump_array_length = 8,
         .jump_array_pos = 0,
         .obstacle_amount = 0,
+        .obstacle_creation_gap = -5, //starts as negative to give a few moments before obstacles start appearing
+        .game_over = false,
+        .game_already_over = false,
     };
 
     task_t tasks[] =
     {
+        {.func = task_game_over, .period = TASK_RATE / 12., .data = &game_data},
         {.func = task_update_player, .period = TASK_RATE / 12., .data = &game_data},
         {.func = task_update_obstacles, .period = TASK_RATE / 8., .data = &game_data},
         {.func = task_draw_screen, .period = TASK_RATE / 1000., .data = &game_data},
     };
 
-    task_schedule(tasks, 3);
+    task_schedule(tasks, 4);
     return 0;
 }

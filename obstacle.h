@@ -8,8 +8,8 @@ typedef struct {
     bool isActive;
 } obstacle_t;
 
-void update_obstacles (obstacle_t* obstacle_array, uint8_t *obstacle_amount, uint8_t *obstacle_creation_gap);
+void update_obstacles (obstacle_t* obstacle_array, uint8_t *obstacle_amount, int8_t *obstacle_creation_gap);
 void draw_obstacles (obstacle_t* obstacle_array);
-
+void check_collision (obstacle_t* obstacle_array, uint16_t* player_position, bool *game_over);
 
 #endif //OBSTACLE_H
