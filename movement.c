@@ -1,8 +1,11 @@
+#include <stdbool.h>
+#include <stdint.h>
+
+#include "movement.h"
 #include "navswitch.h"
 #include "pacer.h"
 #include "tinygl.h"
 #include "button.h"
-#include <stdbool.h>
 
 //Updates player movement - left, right, and jumping.
 void update_movement (uint8_t* player_position, bool *player_jumping, int8_t* jump_array, uint8_t *jump_array_length, uint8_t *jump_array_pos) {

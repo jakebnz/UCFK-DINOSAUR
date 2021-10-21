@@ -1,3 +1,7 @@
+timer: 
+
+task: timer
+
 pio: 
 
 ledmat: pio
@@ -10,17 +14,15 @@ tinygl: display font
 
 navswitch: pio
 
-timer: 
+button: pio
 
 pacer: timer
 
-button: pio
-
 movement: navswitch pacer tinygl button
-
-task: timer
 
 obstacle: tinygl
 
-game: tinygl movement task navswitch button obstacle
+game_start_end: timer button
+
+game: task tinygl navswitch button movement obstacle game_start_end
 

@@ -1,17 +1,19 @@
+#include <stdbool.h>
+#include <stdint.h>
+
 #include "system.h"
-#include "tinygl.h"
-#include "movement.h"
 #include "task.h"
+#include "tinygl.h"
 #include "navswitch.h"
 #include "button.h"
-#include "obstacle.h"
-#include <stdbool.h>
 #include "../fonts/font3x5_1.h"
-#include <stdio.h>
+#include "movement.h"
+#include "obstacle.h"
+#include "game_start_end.h"
 
 //Struct for all of the game data used by tasks.
 typedef struct  {
-    uint8_t player_position[2]; //The player's position
+    uint8_t player_position[2];
     bool player_jumping; //Tracks whether the player is jumping or not
     int8_t jump_array[8]; //The array that is used for the jumping animation
     uint8_t jump_array_length; //The length of jump array
@@ -24,6 +26,7 @@ typedef struct  {
     bool game_not_started; //True if the game has not started for the first time yet.
     bool game_not_started_initialised; //True if the start-up screen has been initialised.
     uint16_t score;
+    bool restart_game; //True when the player restarts the game
 } game_data_t;
 
 //Task to handle the game over and start-up screens of the game, as well as restarting the game after a game over.
@@ -31,25 +34,10 @@ static void task_update_game_active(void *data) {
 
     game_data_t* game_data = data;
 
-    if (game_data->game_not_started == true && game_data->game_not_started_initialised == false) { //If the game hasn't started, and if the startup screen text hasn't initilised.
-        game_data->game_not_started_initialised = true;
-        tinygl_clear();
-        tinygl_text("  DINOSAUR ");
-    } else if (game_data->game_not_started == true && game_data->game_not_started_initialised == true) { //if the game hasn't started, and if the startup screen text has initilised.
-        button_update();
-        if (button_push_event_p(0)) { //if button gets pushed start game
-            game_data->game_not_started = false;
-        }
-    } else if (game_data->game_over == true && game_data->game_over_initialised == false) { //If the game is over, and if the game over screen text hasn't initialised.
-        game_data->game_over_initialised = true;
-        tinygl_clear();
-        char score_str[25]; //A string length of 25 allows a max score of 9,999,999 which would take just under 16 days of constant playing to achieve, so I think it's high enough.
-        snprintf(score_str, 25, " GAME OVER  SCORE:%d", game_data->score);
-        tinygl_text(score_str);
-    } else if (game_data->game_over == true && game_data->game_over_initialised == true) { //If the game is over, and if the game over screen text has initialised.
-        button_update();
-        if (button_push_event_p(0)) { 
-            //Set all of the game_date elements that can change throughout the game back to their defaults.
+    start_end_screen(&game_data->game_not_started, &game_data->game_not_started_initialised, &game_data->game_over, &game_data->game_over_initialised, &game_data->score, &game_data->restart_game);
+
+    if (game_data->restart_game) { //if the player restarts the game
+            //Set all of the game_data elements that can change throughout the game back to their defaults.
             game_data->player_position[0] = 3; 
             game_data->player_position[1] = 6;
             game_data->player_jumping = false;
@@ -63,9 +51,8 @@ static void task_update_game_active(void *data) {
             (game_data->obstacle_array[2]).isActive = false;
             (game_data->obstacle_array[3]).isActive = false;
             game_data->score = 0;
-        }
+            game_data->restart_game = false;
     }
-
 }
 
 //Task to update the movement and position of the player every time it is called.
@@ -151,6 +138,7 @@ int main (void)
         .game_not_started = true,
         .game_not_started_initialised = false,
         .score = 0,
+        .restart_game = false,
     };
 
     //Create task_t with task to perform while the game is running.

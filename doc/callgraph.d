@@ -8,6 +8,8 @@ navswitch_init@navswitch.c:
 
 pio_config_set@pio.c: 
 
+button_init@button.c: pio_config_set
+
 ledmat_init@ledmat.c: pio_config_set pio_config_set
 
 display_clear@display.c: 
@@ -44,7 +46,11 @@ button_update@button.c: pio_input_get
 
 button_push_event_p@button.c: 
 
-task_update_game_active@game.c: tinygl_clear tinygl_text button_update button_push_event_p tinygl_clear tinygl_text button_update button_push_event_p
+start_end_screen@game_start_end.c: tinygl_clear tinygl_text button_update button_push_event_p timer_get srand tinygl_clear snprintf tinygl_text button_update button_push_event_p
+
+task_update_game_active@game.c: start_end_screen
+
+check_collision@obstacle.c: 
 
 pio_config_get@pio.c: 
 
@@ -56,13 +62,11 @@ navswitch_down_p@navswitch.c:
 
 update_movement@movement.c: navswitch_update navswitch_down_p navswitch_down_p button_update button_push_event_p
 
-task_update_player@game.c: update_movement
+task_update_player@game.c: check_collision update_movement check_collision
 
 update_obstacles@obstacle.c: rand rand
 
-check_collision@obstacle.c: 
-
-task_update_obstacles@game.c: update_obstacles check_collision
+task_update_obstacles@game.c: update_obstacles
 
 tinygl_point@obstacle.c: 
 
@@ -98,5 +102,7 @@ tinygl_update@tinygl.c: tinygl_text_advance display_update
 
 task_draw_screen@game.c: tinygl_clear tinygl_point tinygl_point tinygl_draw_line draw_player draw_obstacles tinygl_update
 
-main@game.c: system_init navswitch_init tinygl_init tinygl_font_set tinygl_text_speed_set tinygl_text_mode_set tinygl_text_dir_set task_schedule @task_update_game_active @task_update_player @task_update_obstacles @task_draw_screen
+increase_score@game.c: 
+
+main@game.c: system_init navswitch_init button_init tinygl_init tinygl_font_set tinygl_text_speed_set tinygl_text_mode_set tinygl_text_dir_set task_schedule @task_update_game_active @task_update_player @task_update_obstacles @task_draw_screen @increase_score
 

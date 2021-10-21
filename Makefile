@@ -16,10 +16,13 @@ all: game.out
 
 
 # Compile: create object files from C source files.
-game.o: game.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../fonts/font3x5_1.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h movement.h obstacle.h
+game.o: game.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../fonts/font3x5_1.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h game_start_end.h movement.h obstacle.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-movement.o: movement.c ../../drivers/avr/system.h ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../utils/font.h ../../utils/pacer.h ../../utils/tinygl.h
+game_start_end.o: game_start_end.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../drivers/button.h game_start_end.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+movement.o: movement.c ../../drivers/avr/system.h ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../utils/font.h ../../utils/pacer.h ../../utils/tinygl.h movement.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 obstacle.o: obstacle.c ../../drivers/avr/system.h ../../drivers/display.h ../../utils/font.h ../../utils/tinygl.h obstacle.h
@@ -62,7 +65,7 @@ tinygl.o: ../../utils/tinygl.c ../../drivers/avr/system.h ../../drivers/display.
 
 
 # Link: create output file (executable) from object files.
-game.out: game.o movement.o obstacle.o pio.o system.o timer.o button.o display.o ledmat.o navswitch.o font.o pacer.o task.o tinygl.o
+game.out: game.o game_start_end.o movement.o obstacle.o pio.o system.o timer.o button.o display.o ledmat.o navswitch.o font.o pacer.o task.o tinygl.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 

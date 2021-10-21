@@ -12,6 +12,8 @@
 
 ../../utils/font.o: ../../utils/font.c
 
+movement.h: 
+
 ../../drivers/navswitch.h: 
 
 ../../utils/pacer.h: 
@@ -22,7 +24,7 @@
 
 ../../drivers/button.h: 
 
-movement.c: ../../drivers/navswitch.h ../../utils/pacer.h ../../utils/tinygl.h ../../drivers/button.h
+movement.c: movement.h ../../drivers/navswitch.h ../../utils/pacer.h ../../utils/tinygl.h ../../drivers/button.h
 
 movement.o: movement.c
 
@@ -30,17 +32,17 @@ movement.o: movement.c
 
 ../../drivers/button.o: ../../drivers/button.c
 
-movement.h: 
-
 ../../drivers/avr/timer.h: 
 
 ../../utils/task.h: ../../drivers/avr/timer.h
 
-obstacle.h: 
-
 ../../fonts/font3x5_1.h: ../../utils/font.h
 
-game.c: ../../utils/tinygl.h movement.h ../../utils/task.h ../../drivers/navswitch.h ../../drivers/button.h obstacle.h ../../fonts/font3x5_1.h
+obstacle.h: 
+
+game_start_end.h: 
+
+game.c: ../../utils/task.h ../../utils/tinygl.h ../../drivers/navswitch.h ../../drivers/button.h ../../fonts/font3x5_1.h movement.h obstacle.h game_start_end.h
 
 game.o: game.c
 
@@ -76,11 +78,15 @@ obstacle.o: obstacle.c
 
 ../../utils/pacer.o: ../../utils/pacer.c
 
+game_start_end.c: ../../drivers/avr/timer.h ../../drivers/button.h game_start_end.h
+
+game_start_end.o: game_start_end.c
+
 ../../drivers/avr/delay.h: 
 
 ../../drivers/navswitch.c: ../../drivers/navswitch.h ../../drivers/avr/delay.h ../../drivers/avr/pio.h
 
 ../../drivers/navswitch.o: ../../drivers/navswitch.c
 
-game.out: ../../drivers/ledmat.o ../../utils/font.o movement.o ../../drivers/button.o game.o ../../utils/tinygl.o ../../utils/task.o ../../drivers/avr/timer.o ../../drivers/display.o obstacle.o ../../drivers/avr/pio.o ../../drivers/avr/system.o ../../utils/pacer.o ../../drivers/navswitch.o
+game.out: ../../drivers/ledmat.o ../../utils/font.o movement.o ../../drivers/button.o game.o ../../utils/tinygl.o ../../utils/task.o ../../drivers/avr/timer.o ../../drivers/display.o obstacle.o ../../drivers/avr/pio.o ../../drivers/avr/system.o ../../utils/pacer.o game_start_end.o ../../drivers/navswitch.o
 
