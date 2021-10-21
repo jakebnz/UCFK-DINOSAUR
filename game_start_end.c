@@ -1,6 +1,8 @@
 #include "game_start_end.h"
 #include <stdbool.h>
 
+
+
 void restart_game (game_data_t* game_data) {
     game_data->player_position[0] = 3; //default player positon is 3,6
     game_data->player_position[1] = 6;
