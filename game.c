@@ -75,7 +75,9 @@ static void task_update_player (void *data) {
     if (game_data->game_over == false && game_data->game_not_started == false) {
         game_data->prev_player_position[0] = game_data->player_position[0];
         game_data->prev_player_position[1] = game_data->player_position[1];
+        check_collision(game_data->obstacle_array, game_data->player_position, &game_data->game_over);
         update_movement(game_data->player_position, &game_data->player_jumping, game_data->jump_array, &game_data->jump_array_length, &game_data->jump_array_pos);
+        check_collision(game_data->obstacle_array, game_data->player_position, &game_data->game_over);
     }
     
 }
@@ -86,7 +88,6 @@ static void task_update_obstacles (void *data) {
 
     if (game_data->game_over == false && game_data->game_not_started == false) {
         update_obstacles(game_data->obstacle_array, &game_data->obstacle_amount, &game_data->obstacle_creation_gap);
-        check_collision(game_data->obstacle_array, game_data->player_position, &game_data->game_over);
     }
 }
 
