@@ -3,7 +3,7 @@
 
 //Obstacle struct. If y position (position[2]) == -1, then the obstacle is presumed to not exist (i.e. be null)
 typedef struct {
-    int8_t position[2]; //the position of an obstacle is represented by its bottom-right most point. that means a vertical obtsacle will also have a point above it, and a horizontal obstacle will have a point below it
+    int8_t position[2]; //the position of an obstacle is represented by its top-right most point. that means a vertical obtsacle will also have a point below it, and a horizontal obstacle will have a point to the left of it
     bool isVertical;
     bool isActive;
 } obstacle_t;

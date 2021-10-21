@@ -76,7 +76,7 @@ int main (void)
     task_t tasks[] =
     {
         {.func = task_update_player, .period = TASK_RATE / 12., .data = &game_data},
-        {.func = task_update_obstacles, .period = TASK_RATE / 6., .data = &game_data},
+        {.func = task_update_obstacles, .period = TASK_RATE / 8., .data = &game_data},
         {.func = task_draw_screen, .period = TASK_RATE / 1000., .data = &game_data},
     };
 
