@@ -8,7 +8,7 @@ typedef struct {
     bool isActive;
 } obstacle_t;
 
-void update_obstacles(obstacle_t* obstacle_array);
+void update_obstacles (obstacle_t* obstacle_array, uint8_t obstacle_amount);
 
 
 #endif //OBSTACLE_H

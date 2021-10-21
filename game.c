@@ -15,6 +15,7 @@ typedef struct  {
     uint16_t jump_array_length;
     uint16_t jump_array_pos;
     obstacle_t obstacle_array[4];
+    uint8_t obstacle_amount;
 } game_data_t;
 
 static void task_update_player (void *data) {
@@ -29,8 +30,10 @@ static void task_update_player (void *data) {
 static void task_draw_screen (void *data) {
 
     game_data_t* game_data = data;
-
-    draw_player(game_data->player_position, game_data->prev_player_position);
+    
+    tinygl_clear(); //clear screen
+    tinygl_draw_line(tinygl_point(4,0), tinygl_point (4, 6), 1); //draw floor
+    draw_player(game_data->player_position); //draw player
     tinygl_update();
 }
 

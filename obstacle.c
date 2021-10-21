@@ -5,8 +5,7 @@
 
 obstacle_t obstacle_array[4];
 
-void update_obstacles (obstacle_t* obstacle_array) {
-    uint8_t obstacle_amount = 0; //delete later
+void update_obstacles (obstacle_t* obstacle_array, uint8_t obstacle_amount) {
     if (obstacle_amount < 4) { //if there are less than 4 obstacles active add a new one
         obstacle_array[obstacle_amount].isVertical = rand() % 2; //generate random number either 0 or 1
         obstacle_array[obstacle_amount].position[0] = -1; //x pos starts as -1, has 1 added to it later
@@ -38,3 +37,7 @@ void update_obstacles (obstacle_t* obstacle_array) {
         }
     }
 }
+
+//void draw_obstacles (obstacle_t* obstacle_array) {
+
+//}

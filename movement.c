@@ -38,7 +38,6 @@ void update_movement (uint16_t* player_position, bool *player_jumping, int8_t* j
 }
 
 
-void draw_player (uint16_t* player_position, uint16_t* prev_player_position) {
-    tinygl_draw_point(tinygl_point(prev_player_position[0], prev_player_position[1]), 0);
+void draw_player (uint16_t* player_position) {
     tinygl_draw_point(tinygl_point(player_position[0], player_position[1]), 1);
 }
