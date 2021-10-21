@@ -38,9 +38,9 @@ movement.h:
 
 obstacle.h: 
 
-../../fonts/font5x7_1.h: ../../utils/font.h
+../../fonts/font3x5_1.h: ../../utils/font.h
 
-game.c: ../../utils/tinygl.h movement.h ../../utils/task.h ../../drivers/navswitch.h ../../drivers/button.h obstacle.h ../../fonts/font5x7_1.h
+game.c: ../../utils/tinygl.h movement.h ../../utils/task.h ../../drivers/navswitch.h ../../drivers/button.h obstacle.h ../../fonts/font3x5_1.h
 
 game.o: game.c
 

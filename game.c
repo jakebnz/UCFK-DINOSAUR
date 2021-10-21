@@ -7,6 +7,7 @@
 #include "obstacle.h"
 #include <stdbool.h>
 #include "../fonts/font3x5_1.h"
+#include <stdio.h>
 
 typedef struct  {
     uint16_t player_position[2];
@@ -22,7 +23,50 @@ typedef struct  {
     bool game_over_initialised; //true if the game_over screen has been initliased
     bool game_not_started;
     bool game_not_started_initialised; //true if the game_not_started screen has been initialised
+    uint16_t score;
 } game_data_t;
+
+static void task_update_game_active(void *data) {
+
+    game_data_t* game_data = data;
+
+    if (game_data->game_not_started == true && game_data->game_not_started_initialised == false) { //If the game hasn't started, and if the startup screen text hasn't initilised.
+        game_data->game_not_started_initialised = true;
+        tinygl_clear();
+        tinygl_text("  DINOSAUR ");
+    } else if (game_data->game_not_started == true && game_data->game_not_started_initialised == true) { //if the game hasn't started, and if the startup screen text has initilised.
+        button_update();
+        if (button_push_event_p(0)) { //if button gets pushed start game
+            game_data->game_not_started = false;
+        }
+    } else if (game_data->game_over == true && game_data->game_over_initialised == false) { //If the game is over, and if the game over screen text hasn't initialised.
+        game_data->game_over_initialised = true;
+        tinygl_clear();
+        char score_str[25]; //A string length of 25 allows a max score of 9,999,999 which would take just under 16 days of constant playing to achieve, so I think it's high enough.
+        int16_t j = snprintf(score_str, 25, " GAME OVER  SCORE:%d", game_data->score);
+        tinygl_text(score_str);
+    } else if (game_data->game_over == true && game_data->game_over_initialised == true) { //If the game is over, and if the game over screen text has initialised.
+        button_update();
+        if (button_push_event_p(0)) { //if button gets pushed restart game
+            game_data->player_position[0] = 3; //default player positon is 3,6
+            game_data->player_position[1] = 6;
+            game_data->player_jumping = false;
+            game_data->jump_array_pos = 0;
+            game_data->obstacle_amount = 0;
+            game_data->obstacle_creation_gap = -5; //starts as negative to give a few moments before obstacles start appearing
+            game_data->game_over = false;
+            game_data->game_over_initialised = false;
+            (game_data->obstacle_array[0]).isActive = false;
+            (game_data->obstacle_array[1]).isActive = false;
+            (game_data->obstacle_array[2]).isActive = false;
+            (game_data->obstacle_array[3]).isActive = false;
+            game_data->score = 0;
+        }
+    }
+
+    //tinygl_update();
+
+}
 
 static void task_update_player (void *data) {
     
@@ -60,46 +104,14 @@ static void task_draw_screen (void *data) {
     tinygl_update();
 }
 
-static void task_update_game_active(void *data) {
+static void increase_score (void *data) {
 
     game_data_t* game_data = data;
 
-    if (game_data->game_not_started == true && game_data->game_not_started_initialised == false) { //if the game hasn't started, and
-        game_data->game_not_started_initialised = true;
-        tinygl_clear();
-        tinygl_text("  DINOSAUR ");
-    } else if (game_data->game_not_started == true && game_data->game_not_started_initialised == true) { //if the game hasn't started, and if game_not_started task has already run.
-        button_update();
-        if (button_push_event_p(0)) { //if button gets pushed start game
-            game_data->game_not_started = false;
-        }
-    } else if (game_data->game_over == true && game_data->game_over_initialised == false) { //Ran when the game ends.
-        game_data->game_over_initialised = true;
-        tinygl_clear();
-        tinygl_text(" GAME OVER  SCORE:10 ");
-    } else if (game_data->game_over == true && game_data->game_over_initialised == true) { //Ran after the first time the game ends.
-        button_update();
-        if (button_push_event_p(0)) { //if button gets pushed restart game
-            //set everything back to default value
-            game_data->player_position[0] = 3; //default player positon is 3,6
-            game_data->player_position[1] = 6;
-            game_data->player_jumping = false;
-            game_data->jump_array_pos = 0;
-            game_data->obstacle_amount = 0;
-            game_data->obstacle_creation_gap = -5; //starts as negative to give a few moments before obstacles start appearing
-            game_data->game_over = false;
-            game_data->game_over_initialised = false;
-            (game_data->obstacle_array[0]).isActive = false;
-            (game_data->obstacle_array[1]).isActive = false;
-            (game_data->obstacle_array[2]).isActive = false;
-            (game_data->obstacle_array[3]).isActive = false;
-        }
+    if (game_data->game_over == false && game_data->game_not_started == false) {
+        game_data->score++;
     }
-
-    //tinygl_update();
-
 }
-
 
 int main (void)
 {
@@ -131,6 +143,7 @@ int main (void)
         .game_over_initialised = false,
         .game_not_started = true,
         .game_not_started_initialised = false,
+        .score = 0,
     };
 
     task_t tasks[] =
@@ -139,8 +152,9 @@ int main (void)
         {.func = task_update_player, .period = TASK_RATE / 12., .data = &game_data},
         {.func = task_update_obstacles, .period = TASK_RATE / 8., .data = &game_data},
         {.func = task_draw_screen, .period = TASK_RATE / 1000., .data = &game_data},
+        {.func = increase_score, .period = TASK_RATE / 10, .data = &game_data},
     };
 
-    task_schedule(tasks, 4);
+    task_schedule(tasks, 5);
     return 0;
 }

@@ -4,8 +4,6 @@
 #include "obstacle.h"
 #include "tinygl.h"
 
-obstacle_t obstacle_array[4];
-
 void update_obstacles (obstacle_t* obstacle_array, uint8_t *obstacle_amount, int8_t *obstacle_creation_gap) {
     if (*obstacle_creation_gap >= 4) {//if its been more than three passes since last obstacle was created
         if (*obstacle_amount < 4) { //if there are less than 4 obstacles active add a new one
