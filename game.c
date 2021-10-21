@@ -10,12 +10,11 @@
 #include <stdio.h>
 
 typedef struct  {
-    uint16_t player_position[2];
-    uint16_t prev_player_position[2];
+    uint8_t player_position[2];
     bool player_jumping;
     int8_t jump_array[8];
-    uint16_t jump_array_length;
-    uint16_t jump_array_pos;
+    uint8_t jump_array_length;
+    uint8_t jump_array_pos;
     obstacle_t obstacle_array[4];
     uint8_t obstacle_amount;
     int8_t obstacle_creation_gap;
@@ -72,9 +71,9 @@ static void task_update_player (void *data) {
     
     game_data_t* game_data = data;
 
-    if (game_data->game_over == false && game_data->game_not_started == false) {
-        game_data->prev_player_position[0] = game_data->player_position[0];
-        game_data->prev_player_position[1] = game_data->player_position[1];
+    if (game_data->game_over == false && game_data->game_not_started == false) { //Check if game is active.
+        //Collision has to be checked before AND after player position is updated.
+        //If this is not done, it's possible for the player to phase through obstacles, as the player and the obstacles move at different speeds.
         check_collision(game_data->obstacle_array, game_data->player_position, &game_data->game_over);
         update_movement(game_data->player_position, &game_data->player_jumping, game_data->jump_array, &game_data->jump_array_length, &game_data->jump_array_pos);
         check_collision(game_data->obstacle_array, game_data->player_position, &game_data->game_over);
@@ -86,7 +85,7 @@ static void task_update_obstacles (void *data) {
     
     game_data_t* game_data = data;
 
-    if (game_data->game_over == false && game_data->game_not_started == false) {
+    if (game_data->game_over == false && game_data->game_not_started == false) { //If game is active, update obstacle positions.
         update_obstacles(game_data->obstacle_array, &game_data->obstacle_amount, &game_data->obstacle_creation_gap);
     }
 }
@@ -95,14 +94,14 @@ static void task_draw_screen (void *data) {
 
     game_data_t* game_data = data;
 
-    if (game_data->game_over == false && game_data->game_not_started == false) {
+    if (game_data->game_over == false && game_data->game_not_started == false) { //If game is active, draw game objects.
         tinygl_clear(); //clear screen
         tinygl_draw_line(tinygl_point(4,0), tinygl_point (4, 6), 1); //draw floor
         draw_player(game_data->player_position); //draw player
-        draw_obstacles(game_data->obstacle_array);
+        draw_obstacles(game_data->obstacle_array); //draw obstacles
     }
 
-    tinygl_update();
+    tinygl_update(); //Update the screen. This is always done whether the game is active or not to draw the pre-game and post-game screens.
 }
 
 static void increase_score (void *data) {
@@ -153,7 +152,7 @@ int main (void)
         {.func = task_update_player, .period = TASK_RATE / 12., .data = &game_data},
         {.func = task_update_obstacles, .period = TASK_RATE / 8., .data = &game_data},
         {.func = task_draw_screen, .period = TASK_RATE / 1000., .data = &game_data},
-        {.func = increase_score, .period = TASK_RATE / 10, .data = &game_data},
+        {.func = increase_score, .period = TASK_RATE / 1, .data = &game_data},
     };
 
     task_schedule(tasks, 5);

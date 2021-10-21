@@ -48,7 +48,7 @@ void draw_obstacles (obstacle_t* obstacle_array) {
     }
 }
 
-void check_collision (obstacle_t* obstacle_array, uint16_t* player_position, bool *game_over) {
+void check_collision (obstacle_t* obstacle_array, uint8_t* player_position, bool *game_over) {
     for (uint8_t i = 0; i < 4; i++) { //iterate through every obstacle
         obstacle_t obstacle_to_check = obstacle_array[i]; //assigning current obstacle to variable so we dont have to index the array every time
         if (obstacle_to_check.isActive) { //only check collision if obstacle is active

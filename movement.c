@@ -4,18 +4,19 @@
 #include "button.h"
 #include <stdbool.h>
 
-
-void update_movement (uint16_t* player_position, bool *player_jumping, int8_t* jump_array, uint16_t *jump_array_length, uint16_t *jump_array_pos) {
+void update_movement (uint8_t* player_position, bool *player_jumping, int8_t* jump_array, uint8_t *jump_array_length, uint8_t *jump_array_pos) {
     navswitch_update();
     //if navswitch being pushed right
     if (navswitch_down_p(NAVSWITCH_NORTH)) {
-        //If player is on right edge of screen, their x position is 0, and if 1 is subtracting form it it will underflow.
-        //Therfore, check if the number will be smaller than the highest x value possible
+        //Check that moving the player to the left won't send them off the edge of the screen.
+        //If player is on right edge of screen, their x position is 0. If we subtract 1 from 0 in that case, the integer will underflow.
+        //Therefore, in order to check if the player has gone off the edge of the screen, we check if the subtracting 1 from player_position[1] will cause it to be greater than the max value.
         if (player_position[1] - 1 <= 6) {
             player_position[1] = player_position[1] - 1;
         }
     //if navswitch being pushed left
     } else if (navswitch_down_p(NAVSWITCH_SOUTH)) {
+        //Check that moving the player to the left won't send them off the edge of the screen.
         if (player_position[1] + 1 <= 6) {
             player_position[1] = player_position[1] + 1;
         }
@@ -38,6 +39,6 @@ void update_movement (uint16_t* player_position, bool *player_jumping, int8_t* j
 }
 
 
-void draw_player (uint16_t* player_position) {
+void draw_player (uint8_t* player_position) {
     tinygl_draw_point(tinygl_point(player_position[0], player_position[1]), 1);
 }
