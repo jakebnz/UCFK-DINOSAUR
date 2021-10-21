@@ -1,10 +1,18 @@
+/** @file   game_start_end.c
+    @author Mengyan Huang (mhu69) and Jacob Brown (jtb68)
+    @date   22 October 2021
+    @brief  Implements logic for when a game is over, hasn't started yet, or is restarted.
+*/
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "game_start_end.h"
 #include "timer.h"
 #include "button.h"
-#include "game_start_end.h"
+#include "tinygl.h"
+
 
 //Creation and logic for start and end screens.
 void start_end_screen (bool *game_not_started, bool *game_not_started_initialised, bool *game_over, bool *game_over_initialised, uint16_t *score, bool *restart_game) {

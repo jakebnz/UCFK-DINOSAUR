@@ -1,3 +1,10 @@
+/** @file   obstacle.c
+    @author Mengyan Huang (mhu69) and Jacob Brown (jtb68)
+    @date   22 October 2021
+    @brief  Implements logic for creating obstacles, moving obstacles, drawing them on screen,
+            and checking if they collide with a player.
+*/
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>

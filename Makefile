@@ -1,7 +1,7 @@
 # File:   Makefile
-# Author: M. P. Hayes, UCECE
-# Date:   12 Sep 2010
-# Descr:  Makefile for game
+# Author: Mengyan Huang (mhu69) and Jacob Brown (jtb68)
+# Date:   22 October 2021
+# Descr:  Make file for dinosaur game
 
 # Definitions.
 CC = avr-gcc
@@ -12,14 +12,14 @@ DEL = rm
 
 
 # Default target.
-all: game.out
+all: dinosaur.out
 
 
 # Compile: create object files from C source files.
-game.o: game.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../fonts/font3x5_1.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h game_start_end.h movement.h obstacle.h
+dinosaur.o: dinosaur.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../fonts/font3x5_1.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h game_start_end.h movement.h obstacle.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-game_start_end.o: game_start_end.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../drivers/button.h game_start_end.h
+game_start_end.o: game_start_end.c ../../drivers/avr/system.h ../../drivers/avr/timer.h ../../drivers/button.h ../../drivers/display.h ../../utils/font.h ../../utils/tinygl.h game_start_end.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 movement.o: movement.c ../../drivers/avr/system.h ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../utils/font.h ../../utils/pacer.h ../../utils/tinygl.h movement.h
@@ -65,14 +65,14 @@ tinygl.o: ../../utils/tinygl.c ../../drivers/avr/system.h ../../drivers/display.
 
 
 # Link: create output file (executable) from object files.
-game.out: game.o game_start_end.o movement.o obstacle.o pio.o system.o timer.o button.o display.o ledmat.o navswitch.o font.o pacer.o task.o tinygl.o
+dinosaur.out: dinosaur.o game_start_end.o movement.o obstacle.o pio.o system.o timer.o button.o display.o ledmat.o navswitch.o font.o pacer.o task.o tinygl.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 
 
 # Create hex file for programming from executable file.
-game.hex: game.out
-	$(OBJCOPY) -O ihex game.out game.hex
+dinosaur.hex: dinosaur.out
+	$(OBJCOPY) -O ihex dinosaur.out dinosaur.hex
 
 
 # Target: clean project.
@@ -83,7 +83,7 @@ clean:
 
 # Target: program project.
 .PHONY: program
-program: game.hex
-	dfu-programmer atmega32u2 erase; dfu-programmer atmega32u2 flash game.hex; dfu-programmer atmega32u2 start
+program: dinosaur.hex
+	dfu-programmer atmega32u2 erase; dfu-programmer atmega32u2 flash dinosaur.hex; dfu-programmer atmega32u2 start
 
 
