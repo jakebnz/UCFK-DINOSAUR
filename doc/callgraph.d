@@ -36,27 +36,13 @@ timer_wait_until@timer.c: timer_get
 
 task_schedule@task.c: timer_init timer_get timer_wait_until timer_get
 
-pio_config_get@pio.c: 
+tinygl_font_set@tinygl.c: 
 
-_delay_loop_1@navswitch.c: 
+tinygl_text_mode_set@tinygl.c: 
 
-pio_input_get@pio.c: 
+tinygl_draw_message@tinygl.c: strncpy strlen
 
-navswitch_update@navswitch.c: pio_config_get pio_config_set pio_config_set _delay_loop_1 pio_input_get pio_config_set
-
-navswitch_down_p@navswitch.c: 
-
-button_update@button.c: pio_input_get
-
-button_push_event_p@button.c: 
-
-update_movement@movement.c: navswitch_update navswitch_down_p navswitch_down_p button_update button_push_event_p
-
-task_update_player@game.c: update_movement
-
-draw_player@movement.c: tinygl_point tinygl_draw_point
-
-draw_obstacles@obstacle.c: tinygl_point tinygl_point tinygl_draw_line tinygl_point tinygl_point tinygl_draw_line
+tinygl_text@tinygl.c: tinygl_draw_message
 
 font_pixel_get@font.c: 
 
@@ -78,7 +64,37 @@ display_update@display.c: ledmat_display_column
 
 tinygl_update@tinygl.c: tinygl_text_advance display_update
 
+task_game_over@game.c: tinygl_font_set tinygl_text_speed_set tinygl_text_mode_set tinygl_text tinygl_update
+
+pio_config_get@pio.c: 
+
+_delay_loop_1@navswitch.c: 
+
+pio_input_get@pio.c: 
+
+navswitch_update@navswitch.c: pio_config_get pio_config_set pio_config_set _delay_loop_1 pio_input_get pio_config_set
+
+navswitch_down_p@navswitch.c: 
+
+button_update@button.c: pio_input_get
+
+button_push_event_p@button.c: 
+
+update_movement@movement.c: navswitch_update navswitch_down_p navswitch_down_p button_update button_push_event_p
+
+task_update_player@game.c: update_movement
+
+update_obstacles@obstacle.c: rand rand
+
+check_collision@obstacle.c: 
+
+task_update_obstacles@game.c: update_obstacles check_collision
+
+draw_player@movement.c: tinygl_point tinygl_draw_point
+
+draw_obstacles@obstacle.c: tinygl_point tinygl_point tinygl_draw_line tinygl_point tinygl_point tinygl_draw_line
+
 task_draw_screen@game.c: tinygl_clear tinygl_point tinygl_point tinygl_draw_line draw_player draw_obstacles tinygl_update
 
-main@game.c: system_init navswitch_init tinygl_init tinygl_point tinygl_point tinygl_draw_line task_schedule @task_update_player @task_draw_screen
+main@game.c: system_init navswitch_init tinygl_init tinygl_point tinygl_point tinygl_draw_line task_schedule @task_game_over @task_update_player @task_update_obstacles @task_draw_screen
 

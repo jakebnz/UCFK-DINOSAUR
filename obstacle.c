@@ -53,15 +53,17 @@ void draw_obstacles (obstacle_t* obstacle_array) {
 void check_collision (obstacle_t* obstacle_array, uint16_t* player_position, bool *game_over) {
     for (uint8_t i = 0; i < 4; i++) { //iterate through every obstacle
         obstacle_t obstacle_to_check = obstacle_array[i]; //assigning current obstacle to variable so we dont have to index the array every time
-        if (obstacle_to_check.position[0] == player_position[0] && obstacle_to_check.position[1] == player_position[1]) { //if origin of obstacle is the same as the player position
-            *game_over = true;
-        } else if (obstacle_to_check.isVertical) { //if its vertical we also check the point below it
-            if (obstacle_to_check.position[0] + 1 == player_position[0] && obstacle_to_check.position[1] == player_position[1]) {
+        if (obstacle_to_check.isActive) { //only check collision if obstacle is active
+            if (obstacle_to_check.position[0] == player_position[0] && obstacle_to_check.position[1] == player_position[1]) { //if origin of obstacle is the same as the player position
                 *game_over = true;
-            }
-        } else { //if its horizontal we check the point to the left of it
-            if (obstacle_to_check.position[0] == player_position[0] && obstacle_to_check.position[1] + 1 == player_position[1]) {
-                *game_over = true;
+            } else if (obstacle_to_check.isVertical) { //if its vertical we also check the point below it
+                if (obstacle_to_check.position[0] + 1 == player_position[0] && obstacle_to_check.position[1] == player_position[1]) {
+                    *game_over = true;
+                }
+            } else { //if its horizontal we check the point to the left of it
+                if (obstacle_to_check.position[0] == player_position[0] && obstacle_to_check.position[1] + 1 == player_position[1]) {
+                    *game_over = true;
+                }
             }
         }
     }

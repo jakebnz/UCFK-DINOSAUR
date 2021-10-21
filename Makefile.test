@@ -4,7 +4,7 @@
 # Descr:  Makefile for game
 
 CC = gcc
-CFLAGS = -Wall -Wstrict-prototypes -Wextra -g -I. -I../../drivers/test -I../../drivers -I../../utils
+CFLAGS = -Wall -Wstrict-prototypes -Wextra -g -I. -I../../drivers/test -I../../drivers -I../../fonts -I../../utils
 
 DEL = rm
 
@@ -14,7 +14,7 @@ all: game
 
 
 # Compile: create object files from C source files.
-game-test.o: game.c ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../drivers/test/system.h ../../drivers/test/timer.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h movement.h obstacle.h
+game-test.o: game.c ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../drivers/test/system.h ../../drivers/test/timer.h ../../fonts/font5x7_1.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h movement.h obstacle.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 movement-test.o: movement.c ../../drivers/button.h ../../drivers/display.h ../../drivers/navswitch.h ../../drivers/test/system.h ../../utils/font.h ../../utils/pacer.h ../../utils/tinygl.h
