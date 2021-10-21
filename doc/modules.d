@@ -22,7 +22,7 @@ movement: navswitch pacer tinygl button
 
 obstacle: tinygl
 
-game_start_end: timer button
+game_start_end: timer button tinygl
 
-game: task tinygl navswitch button movement obstacle game_start_end
+dinosaur: task tinygl navswitch button movement obstacle game_start_end
 

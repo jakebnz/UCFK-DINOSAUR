@@ -48,7 +48,7 @@ button_push_event_p@button.c:
 
 start_end_screen@game_start_end.c: tinygl_clear tinygl_text button_update button_push_event_p timer_get srand tinygl_clear snprintf tinygl_text button_update button_push_event_p
 
-task_update_game_active@game.c: start_end_screen
+task_update_game_active@dinosaur.c: start_end_screen
 
 check_collision@obstacle.c: 
 
@@ -62,13 +62,13 @@ navswitch_down_p@navswitch.c:
 
 update_movement@movement.c: navswitch_update navswitch_down_p navswitch_down_p button_update button_push_event_p
 
-task_update_player@game.c: check_collision update_movement check_collision
+task_update_player@dinosaur.c: check_collision update_movement check_collision
 
 update_obstacles@obstacle.c: rand rand
 
-task_update_obstacles@game.c: update_obstacles
+task_update_obstacles@dinosaur.c: update_obstacles
 
-tinygl_point@obstacle.c: 
+tinygl_point@dinosaur.c: 
 
 display_pixel_set@display.c: 
 
@@ -100,9 +100,9 @@ display_update@display.c: ledmat_display_column
 
 tinygl_update@tinygl.c: tinygl_text_advance display_update
 
-task_draw_screen@game.c: tinygl_clear tinygl_point tinygl_point tinygl_draw_line draw_player draw_obstacles tinygl_update
+task_draw_screen@dinosaur.c: tinygl_clear tinygl_point tinygl_point tinygl_draw_line draw_player draw_obstacles tinygl_update
 
-increase_score@game.c: 
+increase_score@dinosaur.c: 
 
-main@game.c: system_init navswitch_init button_init tinygl_init tinygl_font_set tinygl_text_speed_set tinygl_text_mode_set tinygl_text_dir_set task_schedule @task_update_game_active @task_update_player @task_update_obstacles @task_draw_screen @increase_score
+main@dinosaur.c: system_init navswitch_init button_init tinygl_init tinygl_font_set tinygl_text_speed_set tinygl_text_mode_set tinygl_text_dir_set task_schedule @task_update_game_active @task_update_player @task_update_obstacles @task_draw_screen @increase_score
 

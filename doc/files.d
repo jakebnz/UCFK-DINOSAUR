@@ -32,23 +32,13 @@ movement.o: movement.c
 
 ../../drivers/button.o: ../../drivers/button.c
 
-../../drivers/avr/timer.h: 
-
-../../utils/task.h: ../../drivers/avr/timer.h
-
-../../fonts/font3x5_1.h: ../../utils/font.h
-
-obstacle.h: 
-
-game_start_end.h: 
-
-game.c: ../../utils/task.h ../../utils/tinygl.h ../../drivers/navswitch.h ../../drivers/button.h ../../fonts/font3x5_1.h movement.h obstacle.h game_start_end.h
-
-game.o: game.c
-
 ../../utils/tinygl.c: ../../utils/tinygl.h ../../drivers/display.h ../../utils/font.h
 
 ../../utils/tinygl.o: ../../utils/tinygl.c
+
+../../drivers/avr/timer.h: 
+
+../../utils/task.h: ../../drivers/avr/timer.h
 
 ../../utils/task.c: ../../utils/task.h ../../drivers/avr/timer.h
 
@@ -62,6 +52,12 @@ game.o: game.c
 
 ../../drivers/display.o: ../../drivers/display.c
 
+../../drivers/avr/system.c: 
+
+../../drivers/avr/system.o: ../../drivers/avr/system.c
+
+obstacle.h: 
+
 obstacle.c: obstacle.h ../../utils/tinygl.h
 
 obstacle.o: obstacle.c
@@ -70,15 +66,19 @@ obstacle.o: obstacle.c
 
 ../../drivers/avr/pio.o: ../../drivers/avr/pio.c
 
-../../drivers/avr/system.c: 
+../../fonts/font3x5_1.h: ../../utils/font.h
 
-../../drivers/avr/system.o: ../../drivers/avr/system.c
+game_start_end.h: 
+
+dinosaur.c: ../../utils/task.h ../../utils/tinygl.h ../../drivers/navswitch.h ../../drivers/button.h ../../fonts/font3x5_1.h movement.h obstacle.h game_start_end.h
+
+dinosaur.o: dinosaur.c
 
 ../../utils/pacer.c: ../../drivers/avr/timer.h ../../utils/pacer.h
 
 ../../utils/pacer.o: ../../utils/pacer.c
 
-game_start_end.c: ../../drivers/avr/timer.h ../../drivers/button.h game_start_end.h
+game_start_end.c: game_start_end.h ../../drivers/avr/timer.h ../../drivers/button.h ../../utils/tinygl.h
 
 game_start_end.o: game_start_end.c
 
@@ -88,5 +88,5 @@ game_start_end.o: game_start_end.c
 
 ../../drivers/navswitch.o: ../../drivers/navswitch.c
 
-game.out: ../../drivers/ledmat.o ../../utils/font.o movement.o ../../drivers/button.o game.o ../../utils/tinygl.o ../../utils/task.o ../../drivers/avr/timer.o ../../drivers/display.o obstacle.o ../../drivers/avr/pio.o ../../drivers/avr/system.o ../../utils/pacer.o game_start_end.o ../../drivers/navswitch.o
+dinosaur.out: ../../drivers/ledmat.o ../../utils/font.o movement.o ../../drivers/button.o ../../utils/tinygl.o ../../utils/task.o ../../drivers/avr/timer.o ../../drivers/display.o ../../drivers/avr/system.o obstacle.o ../../drivers/avr/pio.o dinosaur.o ../../utils/pacer.o game_start_end.o ../../drivers/navswitch.o
 
