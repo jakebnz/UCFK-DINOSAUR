@@ -16,6 +16,7 @@ typedef struct  {
     uint16_t jump_array_pos;
     obstacle_t obstacle_array[4];
     uint8_t obstacle_amount;
+    uint8_t obstacle_creation_gap;
 } game_data_t;
 
 static void task_update_player (void *data) {
@@ -25,6 +26,15 @@ static void task_update_player (void *data) {
     game_data->prev_player_position[0] = game_data->player_position[0];
     game_data->prev_player_position[1] = game_data->player_position[1];
     update_movement(game_data->player_position, &game_data->player_jumping, game_data->jump_array, &game_data->jump_array_length, &game_data->jump_array_pos);
+    
+}
+
+static void task_update_obstacles (void *data) {
+    
+    game_data_t* game_data = data;
+
+    update_obstacles(game_data->obstacle_array, &game_data->obstacle_amount, &game_data->obstacle_creation_gap);
+
 }
 
 static void task_draw_screen (void *data) {
@@ -34,6 +44,7 @@ static void task_draw_screen (void *data) {
     tinygl_clear(); //clear screen
     tinygl_draw_line(tinygl_point(4,0), tinygl_point (4, 6), 1); //draw floor
     draw_player(game_data->player_position); //draw player
+    draw_obstacles(game_data->obstacle_array);
     tinygl_update();
 }
 
@@ -59,14 +70,16 @@ int main (void)
         .jump_array = {1, 1, 1, 0,  0, -1, -1, -1},
         .jump_array_length = 8,
         .jump_array_pos = 0,
+        .obstacle_amount = 0,
     };
 
     task_t tasks[] =
     {
         {.func = task_update_player, .period = TASK_RATE / 12., .data = &game_data},
+        {.func = task_update_obstacles, .period = TASK_RATE / 6., .data = &game_data},
         {.func = task_draw_screen, .period = TASK_RATE / 1000., .data = &game_data},
     };
 
-    task_schedule(tasks, 2);
+    task_schedule(tasks, 3);
     return 0;
 }

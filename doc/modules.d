@@ -20,7 +20,7 @@ movement: navswitch pacer tinygl button
 
 task: timer
 
-obstacle: 
+obstacle: tinygl
 
 game: tinygl movement task navswitch button obstacle
 

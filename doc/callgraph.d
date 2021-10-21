@@ -20,7 +20,7 @@ tinygl_clear@tinygl.c: display_clear
 
 tinygl_init@tinygl.c: display_init tinygl_text_speed_set tinygl_clear
 
-tinygl_point@tinygl.c: 
+tinygl_point@obstacle.c: 
 
 display_pixel_set@display.c: 
 
@@ -54,7 +54,9 @@ update_movement@movement.c: navswitch_update navswitch_down_p navswitch_down_p b
 
 task_update_player@game.c: update_movement
 
-draw_player@movement.c: tinygl_point tinygl_draw_point tinygl_point tinygl_draw_point
+draw_player@movement.c: tinygl_point tinygl_draw_point
+
+draw_obstacles@obstacle.c: tinygl_point tinygl_point tinygl_draw_line tinygl_point tinygl_point tinygl_draw_line
 
 font_pixel_get@font.c: 
 
@@ -76,7 +78,7 @@ display_update@display.c: ledmat_display_column
 
 tinygl_update@tinygl.c: tinygl_text_advance display_update
 
-task_draw_screen@game.c: draw_player tinygl_update
+task_draw_screen@game.c: tinygl_clear tinygl_point tinygl_point tinygl_draw_line draw_player draw_obstacles tinygl_update
 
 main@game.c: system_init navswitch_init tinygl_init tinygl_point tinygl_point tinygl_draw_line task_schedule @task_update_player @task_draw_screen
 
