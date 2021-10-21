@@ -77,7 +77,7 @@ dinosaur.hex: dinosaur.out
 
 # Target: clean project.
 .PHONY: clean
-clean: 
+clean:
 	-$(DEL) *.o *.out *.hex
 
 
